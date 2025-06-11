@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Tax Manager</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="page-layout">
+
+    <!-- Left Sidebar -->
+    <nav class="leftbar">
+      <ul>
+        <li>
+          <strong>Tax Manager</strong>
+          <ul>
+            <li><a href="#overview" class="important-link">Overview</a></li>
+            <li>
+              <a href="#sureaudit" class="important-link">SureAudit</a>
+              <ul>
+                <li><a href="#developer-guide" class="normal-link">Developer Guide</a></li>
+                <li>
+                  <details>
+                    <summary class="normal-link">API Endpoints</summary>
+                    <ul>
+                      <li><a href="#authentication" class="normal-link">Authentication</a></li>
+                      <li><a href="#list-clients" class="normal-link">List Clients</a></li>
+                      <li><a href="#audit-reports" class="normal-link">Audit Reports</a></li>
+                      <li><a href="#report-details" class="normal-link">Report Details</a></li>
+                    </ul>
+                  </details>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+
+      <!-- Overview -->
+      <section id="overview" class="topic-section">
+        <h2>Streamline Audit Readiness with Automation</h2>
+        <p>
+          For a tax manager, staying audit-ready while juggling multiple deadlines, manual tasks, and interdepartmental coordination is a constant challenge. Delays in gathering documentation, inconsistent data across systems, and difficulty collaborating with finance or compliance teams can lead to costly setbacks. The SureAudit API helps address these issues by automating key parts of the audit workflow and ensuring reliable access to updated data.
+        </p>
+
+        <h2>Use Cases</h2>
+        <p>
+          You can see the different use cases below that address a tax manager’s pain points:
+        </p>
+
+        <h3>Retrieve all clients and audit reports in a central database</h3>
+        <p>
+          One of the main use cases of the SureAudit API is retrieving all clients and their associated audit reports in one place. Instead of relying on scattered spreadsheets or multiple software tools, you can automatically pull all relevant reports. This ensures your team always has access to the most current information without chasing down emails or files.
+        </p>
+
+        <h3>Automatically collect detailed report information for audit preparation</h3>
+        <p>
+          Using the SureAudit APIs, you can retrieve detailed information about each report, including timestamps, document types, and verification details. This ensures that you access accurate data from the source in real time, speeding up the compilation of audit packages and responses to regulator inquiries while reducing the risk of errors or outdated information.
+        </p>
+
+        <h3>Enable cross-department collaboration with shared, live data</h3>
+        <p>
+          By integrating the SureAudit APIs with your internal platforms, you enable tax, finance, and compliance teams to work from the same data set. Everyone can access the same up-to-date reports without needing to coordinate manually. This eliminates repetitive requests between departments, reduces confusion, and speeds up decision making. Your team can shift from reactive work to strategic tasks with confidence that the data they are using is complete and accurate.
+        </p>
+
+        <h3>Standardize and scale your audit process across teams</h3>
+        <p>
+          The SureAudit APIs also helps standardize and scale your audit process. Whether you are onboarding new clients, preparing for quarterly reviews, or responding to tax authorities, the process becomes streamlined. This lowers the burden on individual team members and supports long-term consistency.
+        </p>
+      </section>
+
+      <!-- Developer Guide -->
+      <section id="developer-guide" class="topic-section">
+        <h2>Developer Guide: Retrieve Detailed Audit Report Information</h2>
+
+        <p>This guide walks you through accessing detailed audit report information using the SureAudit API. You'll learn how to authenticate, retrieve clients and audit reports, and view a specific report's details. The SureAudit API allows secure access to a client audit data. To retrieve a specific audit report, you'll need to authenticate, list available clients, select a client, get their audit reports, and then query a specific report using its ID.</p>
+
+        <h3>Prerequisites</h3>
+        <ul>
+          <li><strong>API Key:</strong> Your SureAudit <code>client_credentials</code>.</li>
+          <li><strong>Bearer Token:</strong> Needed for authenticated requests.</li>
+          <li><strong>API Tool:</strong> You can use Postman or any tool that can send HTTP requests.</li>
+        </ul>
+
+        <h3>Step 1: Authenticate and get a bearer token</h3>
+        <p>Make a <code>POST</code> request to the <a href="#authentication">authentication endpoint</a> using your <code>client_credentials</code> to get a bearer token. Include this token in the Authorization header of all subsequent requests.</p>
+
+        <h3>Step 2: List clients</h3>
+        <p>Make a <code>GET</code> request to the <a href="#list-clients">list clients endpoint</a> to get a list of clients associated with your credentials. The response includes details for each authorized client, including a <code>clientId</code> you'll need in the next step.</p>
+
+        <h3>Step 3: List audit reports for a client</h3>
+        <p>Use a <code>clientId</code> to make a <code>GET</code> request to the <a href="#audit-reports">retrieve audit reports endpoint</a> to list the corresponding client’s audit reports. A successful response returns array containing all the audit reports, each with a unique <code>reportId</code>.</p>
+
+        <h3>Step 4: Retrieve detailed audit report</h3>
+        <p>Make a <code>GET</code> request to the <a href="#report-details">retrieve detailed audit reports endpoint</a> to get detailed information about a specific report. The <code>reportId</code> identifies the audit report you want to retrieve in detail. The response is an object that contains the following information:</p>
+
+        <h4>Response Fields</h4>
+        <ul>
+          <li><code>reportId</code>: Unique identifier for the report</li>
+          <li><code>clientId</code>: Client associated with the report</li>
+          <li><code>createdDate</code>: When the report was created</li>
+          <li><code>status</code>: The report's completion status</li>
+          <li><code>auditor</code>: Name of the auditor who completed the report</li>
+          <li><code>summary</code>: Description of the report</li>
+          <li><code>attachments</code>: Related files and download links</li>
+        </ul>
+
+        <h3>Troubleshooting</h3>
+        <ul>
+          <li>Ensure your bearer token is current and passed in the Authorization header</li>
+          <li>Double-check that your <code>clientId</code> and <code>reportId</code> values are correct</li>
+          <li>Confirm your network and endpoint URLs are correct</li>
+        </ul>
+      </section>
+
+      <!-- Authentication -->
+      <section id="authentication" class="topic-section">
+        <h2>Obtain a bearer token</h2>
+
+        <p>Use your client credentials to request a bearer token. You’ll use this token to authenticate subsequent API requests.</p>
+
+        <h3>Prerequisites</h3>
+        <ul>
+          <li>Your SureAudit API key, also known as <code>client_credentials</code>.</li>
+          <li>A tool such as <code>curl</code>, Postman, or any HTTP client to send HTTP requests.</li>
+        </ul>
+
+        <pre><code>POST /v1/auth/token</code></pre>
+
+        <h3>Request parameter</h3>
+        <ul>
+          <li>
+            <code>client_credentials</code><span class="type-box">type: string</span><span class="required-box">required</span>
+            <p>The API key that authenticates the user to obtain <code>bearer_token</code>.</p>
+          </li>
+        </ul>
+
+        <div class="code-tabs">
+          <div class="tab-buttons">
+            <button class="request-active" onclick="showRequestTab('auth-curl', this)">cURL</button>
+            <button onclick="showRequestTab('auth-postman', this)">Postman</button>
+            <button onclick="showRequestTab('auth-javascript', this)">JavaScript</button>
+          </div>
+
+          <div id="auth-curl" class="request-tab-content request-active">
+            <pre><code>curl -X POST https://thompson-reuters.com/v1/auth/token \
+  -H "Content-Type: application/json" \
+  -d '{"client_credentials": "&ltclient_credentials&gt;"}'</code></pre>
+          </div>
+
+          <div id="auth-postman" class="request-tab-content">
+            <h4>Authorization</h4>
+            <img src="img/auth/authorization.png" class="postman-img" onclick="openModal(this.src)" />
+            <h4>Headers</h4>
+            <img src="img/auth/header.png" class="postman-img" onclick="openModal(this.src)" />
+            <h4>Request Body</h4>
+            <img src="img/auth/body.png" class="postman-img" onclick="openModal(this.src)" />
+          </div>
+
+          <div id="auth-javascript" class="request-tab-content">
+            <pre><code>fetch('https://thompson-reuters.com/v1/auth/token', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    client_credentials: '&ltclient_credentials&gt;',
+  }),
+})
+.then(response => response.json())
+.then(data => {
+  console.log('Response:', data);
+})
+.catch(error => {
+  console.error('Error:', error);
+});</code></pre>
+          </div>
+        </div>
+
+        <h3>Response</h3>
+        <div class="response-tabs">
+          <div class="tab-buttons">
+            <button class="response-active" onclick="showResponseTab('auth-200', this)">200</button>
+            <button onclick="showResponseTab('auth-400', this)">400</button>
+          </div>
+
+          <div id="auth-200" class="response-tab-content response-active">
+            <pre><code>{
+  "access_token": "your-access-token",
+  "token_type": "Bearer"
+}</code></pre>
+          </div>
+
+          <div id="auth-400" class="response-tab-content">
+            <pre><code>"Error has occurred."</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- List Clients section -->
+      <section id="list-clients" class="topic-section" style="display:none;">
+        <h2>List clients available to the user</h2>
+
+        <p>Use your bearer token to request a clients list. You’ll use this list to view all the clients who are authenticated to you.</p>
+
+        <h3>Prerequisites</h3>
+        <ul>
+          <li>The bearer token you obtained from <a href="#authentication">Authentication endpoint</a>. This token is required to authenticate your requests when retrieving the clients list.</li>
+          <li>A tool such as <code>curl</code>, Postman, or any HTTP client to send HTTP requests.</li>
+        </ul>
+
+        <pre><code>GET /v1/clients</code></pre>
+
+        <h3>Authorization</h3>
+        <ul>
+          <li>
+            Authorization <span class="type-box">type: string</span><span class="type-box">header</span><span class="required-box">required</span>
+            <p>Bearer authentication header of the form <code>Bearer &lt;token&gt;</code>, where <code>&lt;token&gt;</code> is your auth token.</p>
+          </li>
+        </ul>
+
+        <div class="code-tabs">
+          <div class="tab-buttons">
+            <button class="request-active" onclick="showRequestTab('clients-curl', this)">cURL</button>
+            <button onclick="showRequestTab('clients-postman', this)">Postman</button>
+            <button onclick="showRequestTab('clients-javascript', this)">JavaScript</button>
+          </div>
+
+          <div id="clients-curl" class="request-tab-content request-active">
+            <pre><code>curl -X GET https://thompson-reuters.com/v1/clients \
+  -H "Authorization: &ltbearer_tokens&gt;"</code></pre>
+          </div>
+
+          <div id="clients-postman" class="request-tab-content">
+            <h4>Authorization</h4>
+            <img src="img/list-clients/authorization.png" class="postman-img" onclick="openModal(this.src)" />
+            <h4>Headers</h4>
+            <p>You don’t need to set any headers manually. Postman adds them for you.</p>
+            <img src="img/list-clients/headers.png" class="postman-img" onclick="openModal(this.src)" />
+            <h4>Request Body</h4>
+            <p>Leave the body empty.</p>
+            <img src="img/list-clients/body.png" class="postman-img" onclick="openModal(this.src)" />
+          </div>
+
+          <div id="clients-javascript" class="request-tab-content">
+            <pre><code>fetch('https://thompson-reuters.com/v1/clients', {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer &ltbearer_token&gt;',
+  },
+})
+.then(response => response.json())
+.then(data => {
+  console.log('Response:', data);
+})
+.catch(error => {
+  console.error('Error:', error);
+});</code></pre>
+          </div>
+        </div>
+
+        <h3>Response</h3>
+        <ul>
+          <li>
+            clients <span class="type-box">type: Object[]</span>
+            <p>An array containing all the clients authenticated for the user. Each object represents a client with details such as <code>id</code> and <code>name</code>.</p>
+          </li>
+        </ul>
+        <div class="response-tabs">
+          <div class="tab-buttons">
+            <button class="response-active" onclick="showResponseTab('clients-200', this)">200</button>
+            <button onclick="showResponseTab('clients-400', this)">400</button>
+          </div>
+
+          <div id="clients-200" class="response-tab-content response-active">
+            <pre><code>{
+  "clients": [
+    { "clientId": "client1", "name": "Client One" },
+    { "clientId": "client2", "name": "Client Two" }
+  ]
+}</code></pre>
+          </div>
+
+          <div id="clients-400" class="response-tab-content">
+            <pre><code>"Error has occurred."</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <!--Audit Section -->
+
+      <section id="audit-reports" class="topic-section">
+        <h2>Get all audit reports for a given client</h2>
+
+        <p>Use the <code>clientId</code> to retrieve audit reports you have access to for that client.</p>
+
+        <h3>Prerequisites</h3>
+        <ul>
+          <li>The <code>clientId</code> you obtained from <a href="#list-clients">List Clients</a> endpoint specifies the client whose audit reports you want to retrieve.</a></li>
+          <li>A tool such as <code>curl</code>, Postman, or any HTTP client to send HTTP requests.</li>
+        </ul>
+
+        <pre><code>GET /v1/clients/{clientId}/audit-reports?fromDate={fromDate}&toDate={toDate}</code></pre>
+
+        <h3>Path parameter</h3>
+        <ul>
+          <li>
+            <code>clientId</code><span class="type-box">type: string</span><span class="required-box">required</span>
+            <p>The <code>clientId</code> identifies the client whose audit reports you want to retrieve.</p>
+          </li>
+        </ul>
+
+        <h3>Query parameters</h3>
+        <ul>
+          <li>
+            <code>fromDate</code><span class="type-box">type: string</span><span class="optional-box">optional</span>
+            <p>The optional parameter <code>fromDate</code> specifies the start date from which reports are retrieved.</p>
+          </li>
+          <li>
+            <code>toDate</code><span class="type-box">type: string</span><span class="optional-box">optional</span>
+            <p>The optional parameter <code>toDate</code> specifies the end date up to which reports are retrieved.</p>
+          </li>
+        </ul>
+
+        <div class="code-tabs">
+          <div class="tab-buttons">
+            <button class="request-active" onclick="showRequestTab('audit-curl', this)">cURL</button>
+            <button onclick="showRequestTab('audit-postman', this)">Postman</button>
+            <button onclick="showRequestTab('audit-javascript', this)">JavaScript</button>
+          </div>
+
+          <div id="audit-curl" class="request-tab-content request-active">
+            <pre><code>curl -X GET "https://thompson-reuters.com/v1/clients/{clientId}/audit-reports" \
+  -H "Authorization: Bearer &ltyour_access_token&gt;</code></pre>
+          </div>
+
+          <div id="audit-postman" class="request-tab-content">
+            <h4>Authorization</h4>
+            <img src="img/audit/authorization.png" class="postman-img" onclick="openModal(this.src)" />
+            <h4>Headers</h4>
+            <p>You don’t need to set any headers manually. Postman adds them for you.</p>
+            <img src="img/audit/headers.png" class="postman-img" onclick="openModal(this.src)" />
+            <h4>Request Body</h4>
+            <p>Leave the body empty.</p>
+            <img src="img/audit/body.png" class="postman-img" onclick="openModal(this.src)" />
+            <h4>Params</h4>
+            <p>These are optional fields, you don't have to include these to get a successful response.</p>
+            <img src="img/audit/query_parameters.png" class="postman-img" onclick="openModal(this.src)" />
+          </div>
+
+          <div id="audit-javascript" class="request-tab-content">
+            <pre><code>fetch('https://thompson-reuters.com/v1/clients/&ltclientId&gt;/audit-reports?fromDate=2024-01-01&amp;toDate=2024-12-31', {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer &ltaccess_token&gt;',
+  },
+})
+.then(response => response.json())
+.then(data => {
+  console.log('Response:', data);
+})
+.catch(error => {
+  console.error('Error:', error);
+});</code></pre>
+          </div>
+        </div>
+
+        <h3>Response</h3>
+        <ul>
+          <li>
+            auditReports <span class="type-box">type: Object[]</span>
+            <p>An array containing all audit reports for a client. Each object includes details such as <code>reportId</code>, <code>clientId</code>, and <code>createdDate</code>.</p>
+          </li>
+        </ul>
+        <div class="response-tabs">
+          <div class="tab-buttons">
+            <button class="response-active" onclick="showResponseTab('auth-200', this)">200</button>
+            <button onclick="showResponseTab('auth-400', this)">400</button>
+          </div>
+
+          <div id="auth-200" class="response-tab-content response-active">
+            <pre><code>{
+  "auditReports": [
+    {
+      "reportId": "12345",
+      "clientId": "67890",
+      "createdDate": "2024-01-15T10:30:00Z"
+    },
+    {
+      "reportId": "12346",
+      "clientId": "67890",
+      "createdDate": "2024-04-01T08:00:00Z"
+    }
+  ]
+}</code></pre>
+          </div>
+
+          <div id="auth-400" class="response-tab-content">
+            <pre><code>"Error has occurred."</code></pre>
+          </div>
+        </div>        
+      </section>
+
+      <!-- Report Details -->
+      
+      <section id="report-details" class="topic-section">
+        <h2>Get audit report details</h2>
+
+        <p>Use the <code>reportId</code> to retrieve detailed information about a specific audit report.</p>
+
+        <h3>Prerequisites</h3>
+        <ul>
+          <li>The <code>reportId</code> you obtained from <a href="#audit-reports">Audit</a> endpoint specifies the client whose audit reports you want to retrieve.</a></li>
+          <li>A tool such as <code>curl</code>, Postman, or any HTTP client to send HTTP requests.</li>
+        </ul>
+
+        <pre><code>GET /v1/clients/{clientId}/audit-reports?fromDate={fromDate}&toDate={toDate}</code></pre>
+
+        <h3>Path parameter</h3>
+        <ul>
+          <li>
+            <code>reportId</code><span class="type-box">type: string</span><span class="required-box">required</span>
+            <p>The <code>reportId</code> identifies the audit report for which you want to retrieve detailed information.</p>
+          </li>
+        </ul>
+
+        <div class="code-tabs">
+          <div class="tab-buttons">
+            <button class="request-active" onclick="showRequestTab('report-curl', this)">cURL</button>
+            <button onclick="showRequestTab('report-postman', this)">Postman</button>
+            <button onclick="showRequestTab('report-javascript', this)">JavaScript</button>
+          </div>
+
+          <div id="report-curl" class="request-tab-content request-active">
+            <pre><code>curl -X GET "https://thompson-reuters.com/v1/reports/{reportId}" \
+  -H "Authorization: Bearer &lt;your_access_token&gt;"</code></pre>
+          </div>
+
+          <div id="report-postman" class="request-tab-content">
+            <h4>Authorization</h4>
+            <img src="img/reports/authorization.png" class="postman-img" onclick="openModal(this.src)" />
+            <h4>Headers</h4>
+            <p>You don’t need to set any headers manually. Postman adds them for you.</p>
+            <img src="img/reports/headers.png" class="postman-img" onclick="openModal(this.src)" />
+            <h4>Request Body</h4>
+            <p>Leave the body empty.</p>
+            <img src="img/reports/body.png" class="postman-img" onclick="openModal(this.src)" />
+          </div>
+
+          <div id="report-javascript" class="request-tab-content">
+            <pre><code>fetch('https://thompson-reuters.com/v1/reports/{reportId}', {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer &lt;your_access_token&gt;',
+  },
+})
+.then(response => response.json())
+.then(data => {
+  console.log('Response:', data);
+})
+.catch(error => {
+  console.error('Error:', error);
+});</code></pre>
+          </div>
+        </div>
+
+        <h3>Response</h3>
+        <ul>
+          <li>
+            reportDetails <span class="type-box">type: Object[]</span>
+            <p>An array containing detailed information of an audit reports for a client. The object includes all the essential information of the report and a downloadable link for the file.</p>
+          </li>
+        </ul>
+        <div class="response-tabs">
+          <div class="tab-buttons">
+            <button class="response-active" onclick="showResponseTab('report-200', this)">200</button>
+            <button onclick="showResponseTab('report-400', this)">400</button>
+          </div>
+
+          <div id="report-200" class="response-tab-content response-active">
+            <pre><code>
+{
+  "reportId": "12345",
+  "clientId": "67890",
+  "createdDate": "2024-01-15T10:30:00Z",
+  "status": "Completed",
+  "auditor": "John Doe",
+  "summary": "This audit report covers the financial year 2023.",
+  "attachments": [
+    {
+      "fileName": "audit-summary.pdf",
+      "url": "https://thompson-reuters.com/reports/12345/audit-summary.pdf"
+    }
+  ]
+}
+</code></pre>
+          </div>
+
+          <div id="report-400" class="response-tab-content">
+            <pre><code>"Error has occurred."</code></pre>
+          </div>
+        </div>
+      </section>
+
+    </div> <!-- End of main-content -->
+
+  </div> <!-- End of page-layout -->
+
+  <script>
+    // Request tab switch
+    function showRequestTab(tabId, button) {
+      const tabs = document.querySelectorAll('.request-tab-content');
+      const buttons = document.querySelectorAll('.code-tabs .tab-buttons button');
+      tabs.forEach(tab => tab.classList.remove('request-active'));
+      buttons.forEach(btn => btn.classList.remove('request-active'));
+      document.getElementById(tabId).classList.add('request-active');
+      button.classList.add('request-active');
+    }
+
+    // Response tab switch
+    function showResponseTab(tabId, button) {
+      const tabs = document.querySelectorAll('.response-tab-content');
+      const buttons = document.querySelectorAll('.response-tabs .tab-buttons button');
+      tabs.forEach(tab => tab.classList.remove('response-active'));
+      buttons.forEach(btn => btn.classList.remove('response-active'));
+      document.getElementById(tabId).classList.add('response-active');
+      button.classList.add('response-active');
+    }
+
+    // Modal logic
+    function openModal(src) {
+      const modal = document.getElementById('modal');
+      const modalImg = modal.querySelector('img');
+      modalImg.src = src;
+      modal.classList.add('show');
+    }
+
+    function closeModal(event) {
+      if (event.target.id === 'modal' || event.target.tagName === 'IMG') {
+        document.getElementById('modal').classList.remove('show');
+      }
+    }
+
+    // Render pages separately
+    document.addEventListener('DOMContentLoaded', function () {
+      const navLinks = document.querySelectorAll('.leftbar a');
+      const sections = document.querySelectorAll('.topic-section');
+
+      function showSection(id) {
+        sections.forEach(section => {
+          section.style.display = section.id === id ? 'block' : 'none';
+        });
+      }
+
+      navLinks.forEach(link => {
+        link.addEventListener('click', function (event) {
+          event.preventDefault();
+          const targetId = this.getAttribute('href').substring(1);
+          showSection(targetId);
+          history.pushState(null, null, `#${targetId}`);
+        });
+      });
+
+      // Add listener for links inside main content (for prerequisite link)
+      const mainContentLinks = document.querySelectorAll('.main-content a[href^="#"]');
+      mainContentLinks.forEach(link => {
+        link.addEventListener('click', function(event) {
+          event.preventDefault();
+          const targetId = this.getAttribute('href').substring(1);
+          showSection(targetId);
+          history.pushState(null, null, `#${targetId}`);
+        });
+      });
+
+      // Show section on page load
+      const currentHash = window.location.hash.substring(1);
+      if (currentHash) {
+        showSection(currentHash);
+      } else {
+        showSection('overview'); // default to overview
+      }
+    });
+  </script>
+  <!-- Image Modal -->
+  <div id="modal" onclick="closeModal(event)"><img src="" alt="Zoomed image" /></div>
+</body>
+</html>
